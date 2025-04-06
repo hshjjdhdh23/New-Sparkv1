@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-const PAGE_ACCESS_TOKEN = "EAAMhcZA6vDc8BO1ZAB120AXyzrja3sjLp9WncI1jZAZAyZBsBUPv9KV20eZB3QvWbMhCZCdLLhbPuY2P5MxM9DmMBgMr7sZBQZArK5gkqLAWaGotmYAX7sQqjaXgwyWWXFfnckHaflIUlOHwnFk8dKU9N42u6aby61q5SfZC6aWhl0MNg3QO2vMhZCenQamWZAwKnzi2sQZDZD"; // Your token here
+const PAGE_ACCESS_TOKEN = "EAAMhcZA6vDc8BO2EszdQ9PfSzJJpHDoXptPZCHp7OChZAF375crZAuwGCk90ZCSDvpPOBHMPHZBXAO349RZAqQBH1zYArIx22V2wOAmlDFKBHvL97Q1Ync0WEH6pWim7adZB8LvJVIcRTwbGjda6TrcGUT0ZCNEZAEmYv4cAPiKHdvP1wNNsSvesXugyK7lhJrY0VX2AZDZD"; // Your token here
 const VERIFY_TOKEN = "hello"; // Your webhook verification token
 const DB_PATH = './database.json';
 
