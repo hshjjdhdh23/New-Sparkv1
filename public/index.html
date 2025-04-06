@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Spark Archives - Share freely, stay anonymous</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Noto Serif SC', serif;
+    }
+
+    body {
+      background: url('https://i.ibb.co/LzThBMW6/1743867588355.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    header img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 15px;
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      color: #fff;
+    }
+
+    #welcome {
+
+  text-align: center;
+  margin: 40px auto;
+}
+
+.welcome-content h2 {
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-family: 'Noto Serif SC', serif;
+}
+
+.welcome-content p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin: 10px;
+  color: #e0e0e0;
+  font-family: 'Noto Serif SC', serif;
+}
+
+
+    #app {
+      max-width: 350px;
+      margin: 10px auto;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+    }
+
+    .card {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card.active {
+      display: flex;
+    }
+
+    h2 {
+  font-size: 1.5rem;
+text-align: center;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeInUp 1.5s forwards;
+  animation-delay: 0.5s;
+}
+
+h3 {
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 1rem;
+  color: #555;
+  opacity: 0;
+  animation: fadeInUp 1.5s forwards;
+  animation-delay: 1s;
+}
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    input, select, textarea {
+      padding: 10px;
+      font-size: 1rem;
+      color: white;
+      border-radius: 5px;
+      border: none;
+      background: rgba(0, 0, 0, 0.4);
+      width: 100%;
+      margin-bottom: 15px;
+    }
+
+    button {
+  padding: 10px 20px;
+  background-color: #2c98f0;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background-color: #2176c7;
+}
+
+    .swal2-circle-img {
+  border-radius: 50% !important;
+  object-fit: cover;
+}
+
+.watermark {
+  position: fixed;
+  bottom: 10px;
+  right: 15px;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 1);
+  background: rgba(0, 0, 0, 0.8);
+  font-family: 'Noto Serif SC', serif;
+  padding: 10px;
+  border-radius: 30px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.swal2-circle-img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.custom-swal-popup {
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  font-family: 'Noto Serif SC', serif;
+  backdrop-filter: blur(8px);
+  /* Apply the blur effect */
+}
+
+.custom-swal-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.custom-swal-button {
+  font-size: 1rem;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="https://i.ibb.co/YFgznXZM/received-964135092547666.jpg" alt="Logo" />
+    <h1>Spark Archives</h1>
+  </header>
+
+<section id="welcome">
+  <div class="welcome-content">
+    <h3>Welcome to Spark Archives</h3>
+    <p style="font-size: 15px;">
+      “ Spark Archives is your safe space to express freely and anonymously. Whether it's a confession, a suggestion, or just a thought — your voice matters here. ”
+    </p>
+  </div>
+</section>
+
+
+  <div id="app">
+    <form id="submissionForm">
+      <div class="card step step-1 active">
+        <h3>FILL-UP FORM</h3>
+        <label for="category">Category:</label>
+        <select id="category" required>
+          <option value="">Select a Category</option>
+          <option value="CONFESSION">Confession</option>
+          <option value="ENCOURAGEMENT">Encouragement</option>
+          <option value="QUERY">Query</option>
+          <option value="RANT">Rant</option>
+          <option value="THOUGHT">Thought</option>
+          <option value="SUGGESTIONS">Suggestion</option>
+          <option value="OTHERS">Others</option>
+        </select>
+        <button type="button" onclick="nextStep()">Next</button>
+      </div>
+
+      <div class="card step step-2">
+        <h3>FILL-UP FORM</h3>
+        <label for="message_title">Message Title:</label>
+        <input type="text" id="message_title" required>
+        <button type="button" onclick="nextStep()">Next</button>
+      </div>
+
+      <div class="card step step-3">
+        <h3>FILL-UP FORM</h3>
+        <label for="message">Message:</label>
+        <textarea id="message" rows="4" required></textarea>
+        <button type="button" onclick="nextStep()">Next</button>
+      </div>
+
+      <div class="card step step-4">
+        <h3>FILL-UP FORM</h3>
+        <label for="message_to_admin">Message to Admin:</label>
+        <textarea id="message_to_admin" rows="4" required></textarea>
+        <button type="button" onclick="nextStep()">Next</button>
+      </div>
+
+      <div class="card step step-5">
+        <h3>FILL-UP FORM</h3>
+        <label for="codename">Codename:</label>
+        <input type="text" id="codename" required>
+        <button type="button" onclick="nextStep()">Next</button>
+      </div>
+
+      <div class="card step step-6">
+        <h3>FILL-UP FORM</h3>
+        <label for="option">Sender Type:</label>
+        <select id="option" required>
+          <option value="">Select a Type</option>
+          <option value="MONTESSORIAN">Montessorian</option>
+          <option value="NON-MONTESSORIAN">Non-Montessorian</option>
+        </select>
+        <button type="button" onclick="nextStep()">Next</button>
+      </div>
+
+      <div class="card step step-7">
+        <h3>SUBMISSION</h3>
+        <p style="text-align: center;" type="text" id="photo_link">Once submitted, changes may not be possible.</p><br>
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    Swal.fire({
+  title: 'WELCOME TO THE SPARK ARCHIVES',
+  html: `<p style="font-size: 1rem; color: #f0f0f0;">Share your thoughts anonymously and freely!</p>`,
+  imageUrl: 'https://i.ibb.co/YFgznXZM/received-964135092547666.jpg',
+  imageAlt: 'Logo',
+  imageWidth: 90,
+  imageHeight: 90,
+  background: 'linear-gradient(135deg, rgba(30, 30, 47, 0.7), rgba(43, 43, 68, 0.7))',
+  backdrop: 'rgba(0, 0, 0, 0.3)',
+  color: '#fff',
+  confirmButtonColor: '#00c9a7',
+  confirmButtonText: "Let's Go!",
+  customClass: {
+    image: 'swal2-circle-img',
+    popup: 'custom-swal-popup',
+    title: 'custom-swal-title',
+    confirmButton: 'custom-swal-button'
+  }
+});
+
+    let currentStep = 1;
+
+    function nextStep() {
+      const currentCard = document.querySelector(`.card.step-${currentStep}`);
+      const inputs = currentCard.querySelectorAll('input, textarea, select');
+      let allValid = true;
+
+      inputs.forEach((input) => {
+        if (input.id !== "photo_link") {
+          if (input.required && !input.value.trim()) {
+            allValid = false;
+            input.style.borderColor = 'red';
+          } else {
+            input.style.borderColor = '';
+          }
+        }
+      });
+
+      if (allValid) {
+        currentCard.classList.remove('active');
+        currentStep++;
+        document.querySelector(`.card.step-${currentStep}`).classList.add('active');
+      } else {
+        Swal.fire({
+          title: 'Please Fill All Fields',
+          text: 'Make sure to complete all required fields before proceeding.',
+          icon: 'warning',
+          confirmButtonText: 'OK',
+        });
+      }
+    }
+
+    document.getElementById("submissionForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const data = {
+        codename: document.getElementById('codename').value,
+        message_title: document.getElementById('message_title').value,
+        message: document.getElementById('message').value,
+        message_to_admin: document.getElementById('message_to_admin').value,
+        category: document.getElementById('category').value,
+        option: document.getElementById('option').value,
+        photo_link: document.getElementById('photo_link').value
+      };
+
+      const response = await fetch('/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.text();
+      if (response.ok) {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Your message has been successfully sent for review.',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          document.getElementById('submissionForm').reset();
+          document.querySelector(`.card.step-${currentStep}`).classList.remove('active');
+          currentStep = 1;
+          document.querySelector(`.card.step-1`).classList.add('active');
+        });
+      } else {
+        Swal.fire({
+          title: 'Error!',
+          text: result,
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      }
+    });
+  </script>
+  <div class="watermark">Created by: Kiff Hyacinth Pon</div>
+  <body>
+  <audio autoplay loop hidden>
+    <source src="blue.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+
+</body>
+</html>
+
