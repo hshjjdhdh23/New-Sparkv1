@@ -74,6 +74,30 @@
   border-radius: 8px;
   border: 1px solid #ddd;
 }
+    select {
+  width: calc(100% - 1rem);
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  outline: none;
+  font-size: 0.95rem;
+  background-color: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="10" viewBox="0 0 14 10"><path fill="gray" d="M7 10L0 0h14z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 12px;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+select:focus {
+  border-color: #4f46e5;
+}
+    
 
     .submission-container:hover {
       transform: translateY(-5px);
@@ -139,14 +163,14 @@
     textarea:focus, input:focus {
       border-color: #4f46e5;
     }
-    
+
         .login-container {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
     }
-    
+
     .login-box {
       background: white;
       padding: 2rem;
@@ -155,11 +179,11 @@
       text-align: center;
       width: 300px;
     }
-    
+
     .login-box h2 {
       margin-bottom: 1rem;
     }
-    
+
     .login-box input {
       width: 100%;
       padding: 0.75rem;
@@ -167,7 +191,7 @@
       border: 1px solid #ddd;
       border-radius: 8px;
     }
-    
+
     .login-box button {
       width: 100%;
       padding: 0.75rem;
@@ -177,7 +201,7 @@
       border-radius: 8px;
       cursor: pointer;
     }
-    
+
     #adminPanel {
       display: none;
     }
@@ -192,7 +216,7 @@
       <button onclick="login()">Login</button>
     </div>
   </div>
-  
+
   <!-- Admin Panel (Hidden initially) -->
   <div id="adminPanel">
     <header>
@@ -201,7 +225,7 @@
         Admin Panel
       </a>
     </header>
-    
+
     <h1 class="page-title">Manage Entries</h1>
     <div id="submissions"></div>
   </div>
@@ -214,7 +238,7 @@ const ADMIN_PASSWORD = "sparkarchives";
 function login() {
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
-  
+
   if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
     localStorage.setItem("loggedIn", "true");
     showAdminPanel();
@@ -268,7 +292,17 @@ async function fetchSubmissions() {
           <textarea id="admin_response_${index}" rows="3" cols="40" required></textarea><br><br>
 
           <label for="admin_nickname_${index}">Admin Nickname:</label>
-          <input type="text" id="admin_nickname_${index}" required><br><br>
+          <select id="admin_nickname_${index}" required>
+          <option value="Admin Xie">Admin Xie</option>
+          <option value="Admin Vylle">Admin Vylle</option>
+          <option value="Admin Jay">Admin Jay</option>
+          <option value="Admin Shiro">Admin Shiro</option>
+          <option value="Admin Lychee">Admin Lychee</option>
+          <option value="Admin Cookie">Admin Cookie</option>
+          <option value="Admin Rielle">Admin Rielle</option>
+          <option value="Admin CLN">Admin CLN</option>
+          <option value="Admin Ivauxn">Admin Ivauxn</option>
+          </select><br><br>
 
           <div class="submission-actions">
             <button class="approve-button" onclick="approveSubmission(${index})">Approve</button>
@@ -331,5 +365,3 @@ async function fetchSubmissions() {
     checkLogin();
   </script>
 </body>
-</html>
-
