@@ -3,207 +3,444 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel</title>
+  <title>Admin Panel - Spark Archives</title>
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.9/dist/sweetalert2.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to right, #f3f4f6, #e5e9f0);
-      color: #333;
+    /* Global Variables */
+    :root {
+      --primary-blue: #0A192F; /* Darkest Navy Blue - Header, Major Text */
+      --secondary-blue: #1C2D41; /* Slightly Lighter Navy - Card Borders, etc. */
+      --accent-teal: #00CBA7; /* Vibrant Teal - Main Accent, Highlights */
+      --light-gray: #F0F4F8; /* Very Light Background */
+      --medium-gray: #D0D9E0; /* Subtle Borders, Separators */
+      --text-dark: #334155; /* Dark Text for Readability */
+      --text-light: #F8FAFC; /* Light Text for Dark Backgrounds */
+      --success-green: #34D399; /* Success Actions */
+      --danger-red: #EF4444; /* Danger Actions */
+      --shadow-base: rgba(0, 0, 0, 0.08); /* Base Shadow for Depth */
+      --shadow-hover: rgba(0, 0, 0, 0.15); /* More Pronounced Shadow on Hover */
     }
 
+    /* Base Styles */
+    body {
+      margin: 0;
+      font-family: 'Urbanist', sans-serif; /* Modern, clean sans-serif */
+      background-color: var(--light-gray);
+      color: var(--text-dark);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-weight: 400; /* Default font weight */
+    }
+
+    /* --- Header --- */
     header {
       position: sticky;
       top: 0;
-      background: #1f2937;
-      color: #fff;
-      padding: 1rem 2rem;
+      background-color: var(--primary-blue);
+      color: var(--text-light);
+      padding: 1.25rem 3rem; /* Generous padding */
       display: flex;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      align-items: center;
+      box-shadow: 0 6px 20px var(--shadow-base);
       z-index: 1000;
+      justify-content: center;
+      border-bottom: 3px solid var(--accent-teal); /* Unique accent line */
     }
 
     .logo {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      color: #fff;
-      font-size: 1.5rem;
-      font-weight: 600;
+      gap: 1rem;
+      color: var(--text-light);
+      font-size: 1.8rem; /* Larger logo text */
+      font-weight: 700;
       text-decoration: none;
+      letter-spacing: -0.04em; /* Tighter for modern look */
     }
 
     .logo img {
-      width: 40px;
-      border-radius: 50px;
-      height: 40px;
+      width: 55px; /* Larger logo image */
+      height: 55px;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 255, 255, 0.3); /* Subtle white border */
+      object-fit: cover;
+      transition: transform 0.3s ease;
     }
 
+    .logo img:hover {
+      transform: scale(1.05);
+    }
+
+    /* --- Page Title --- */
     .page-title {
       text-align: center;
-      color: #1f2937;
-      font-size: 2rem;
-      margin: 1rem;
+      color: var(--primary-blue);
+      font-size: 3rem; /* Prominent title */
+      font-weight: 800; /* Extra bold */
+      margin: 3.5rem 0 2rem;
+      letter-spacing: -0.05em;
+      position: relative;
+      padding-bottom: 0.8rem;
     }
 
+    .page-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px; /* Wider accent line */
+      height: 6px; /* Thicker accent line */
+      background-color: var(--accent-teal);
+      border-radius: 3px;
+    }
+
+    /* --- Submissions Grid --- */
     #submissions {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.4rem;
-      padding: 2rem;
-      max-width: 1200px;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); /* Larger cards */
+      gap: 2.5rem; /* More space between cards */
+      padding: 3rem; /* Generous overall padding */
+      max-width: 1500px; /* Wider content area */
       margin: 0 auto;
+      flex-grow: 1;
     }
 
     .submission-container {
-      background: #fff;
-      border-radius: 12px;
-      padding: 1rem;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s, box-shadow 0.3s;
+      background: var(--text-light); /* Pure white background */
+      border-radius: 16px; /* Slightly softer corners */
+      padding: 2.5rem; /* More internal padding */
+      box-shadow: 0 10px 30px var(--shadow-base); /* Deep, soft shadow */
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--medium-gray); /* Subtle border */
+      position: relative;
+      overflow: hidden;
     }
-    .message-content, .message-to-admin {
-  max-height: 150px; /* Fixed height */
-  overflow-y: auto; /* Enables vertical scrolling */
-  word-wrap: break-word; /* Ensures long words break properly */
-  white-space: pre-wrap; /* Preserves spaces, line breaks & allows wrapping */
-  background: #f9fafb; /* Light background for readability */
-  padding: 0.5rem;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-}
-    select {
-  width: calc(100% - 1rem);
-  padding: 0.75rem;
-  margin-top: 0.5rem;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  outline: none;
-  font-size: 0.95rem;
-  background-color: #fff;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="10" viewBox="0 0 14 10"><path fill="gray" d="M7 10L0 0h14z"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  background-size: 12px;
-  cursor: pointer;
-  transition: border-color 0.3s ease;
-}
 
-select:focus {
-  border-color: #4f46e5;
-}
-    
+    .submission-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 8px; /* Top accent bar */
+        background-color: var(--accent-teal);
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+    }
 
     .submission-container:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+      transform: translateY(-12px); /* Lift significantly on hover */
+      box-shadow: 0 20px 45px var(--shadow-hover); /* Stronger shadow on hover */
+      border-color: var(--accent-teal); /* Border highlights */
     }
 
     .submission-header {
       font-weight: 600;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.7rem;
+      font-size: 1.05rem;
+      color: var(--primary-blue);
+      border-bottom: 1px dashed var(--medium-gray); /* Dashed separator */
+      padding-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .submission-header strong {
+      font-weight: 700;
+      color: var(--primary-blue);
     }
 
     .submission-details {
       font-size: 0.95rem;
-      color: #555;
-      margin-bottom: 1rem;
-      line-height: 1.6;
+      color: var(--text-dark);
+      margin-bottom: 0.9rem;
+      line-height: 1.5;
     }
 
+    /* --- Message Content Areas --- */
+    .message-content, .message-to-admin {
+      max-height: 140px;
+      overflow-y: auto;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+      background: var(--light-gray); /* Lighter background for content blocks */
+      padding: 1.2rem;
+      border-radius: 10px;
+      border: 1px solid var(--medium-gray);
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-dark);
+      box-shadow: inset 0 1px 4px rgba(0,0,0,0.03);
+      font-family: 'Inter', sans-serif; /* Maintain readability for code/pre-wrap */
+    }
+
+    /* --- Form Elements --- */
+    textarea, input, select {
+      width: calc(100% - 2.4rem); /* Account for padding */
+      padding: 1.1rem; /* Generous padding */
+      margin-top: 0.8rem;
+      margin-bottom: 1.2rem;
+      border-radius: 10px;
+      border: 1px solid var(--medium-gray);
+      outline: none;
+      font-size: 0.95rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      background-color: var(--light-gray);
+      color: var(--primary-blue);
+      font-weight: 500;
+    }
+
+    textarea::placeholder, input::placeholder {
+        color: #9AA7B3; /* Lighter, subtle placeholder */
+        font-weight: 400;
+    }
+
+    textarea:focus, input:focus, select:focus {
+      border-color: var(--accent-teal);
+      box-shadow: 0 0 0 4px rgba(0, 203, 167, 0.25); /* Teal glow */
+    }
+
+    label {
+        display: block;
+        margin-top: 1.2rem;
+        margin-bottom: 0.5rem;
+        font-weight: 600; /* Semi-bold labels */
+        color: var(--primary-blue);
+        font-size: 0.95rem;
+        letter-spacing: -0.02em;
+    }
+
+    select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="%236B7280" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 16px;
+      cursor: pointer;
+    }
+
+    /* --- Buttons --- */
     .submission-actions {
       display: flex;
-      justify-content: space-between;
-      margin-top: 1rem;
+      gap: 1.5rem; /* Wider gap between buttons */
+      margin-top: 2rem;
+      justify-content: flex-end;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--medium-gray); /* Clear separator */
     }
 
     .submission-actions button {
-      padding: 0.5rem 1.25rem;
-      border-radius: 8px;
+      padding: 0.9rem 2rem;
+      border-radius: 10px;
       font-weight: 600;
       border: none;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      font-size: 1rem;
+      min-width: 140px;
+      letter-spacing: 0.02em;
     }
 
     .approve-button {
-      background: #10b981;
-      color: #fff;
+      background-color: var(--success-green);
+      color: var(--text-light);
     }
 
     .approve-button:hover {
-      background: #059669;
+      background-color: #22B081; /* Slightly darker green */
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(52, 211, 153, 0.4);
     }
 
     .decline-button {
-      background: #ef4444;
-      color: #fff;
+      background-color: var(--danger-red);
+      color: var(--text-light);
     }
 
     .decline-button:hover {
-      background: #dc2626;
+      background-color: #CC3333; /* Slightly darker red */
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
     }
 
-    textarea, input {
-      width: calc(100% - 1rem);
-      padding: 0.75rem;
-      margin-top: 0.5rem;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      outline: none;
-      font-size: 0.95rem;
-      transition: border-color 0.3s;
-    }
-
-    textarea:focus, input:focus {
-      border-color: #4f46e5;
-    }
-
-        .login-container {
+    /* --- Login Form --- */
+    .login-container {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      background: linear-gradient(135deg, #EBF5FC 0%, #D8E3EF 100%); /* Soft, clean gradient */
     }
 
     .login-box {
-      background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      background: var(--text-light);
+      padding: 3.5rem;
+      border-radius: 20px;
+      box-shadow: 0 15px 45px var(--shadow-base);
       text-align: center;
-      width: 300px;
+      width: 450px;
+      max-width: 90%;
+      border: 1px solid var(--medium-gray);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 10px; /* Top accent bar */
+        background-color: var(--accent-teal);
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
     }
 
     .login-box h2 {
-      margin-bottom: 1rem;
+      margin-bottom: 2.5rem;
+      font-size: 2.5rem;
+      color: var(--primary-blue);
+      font-weight: 800;
+      letter-spacing: -0.05em;
     }
 
     .login-box input {
-      width: 100%;
-      padding: 0.75rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ddd;
-      border-radius: 8px;
+      width: calc(100% - 2.4rem);
+      padding: 1.2rem;
+      margin-bottom: 1.8rem;
+      border: 1px solid var(--medium-gray);
+      border-radius: 10px;
+      font-size: 1rem;
+      background-color: var(--light-gray);
+      color: var(--primary-blue);
+      font-weight: 500;
     }
 
     .login-box button {
       width: 100%;
-      padding: 0.75rem;
-      background: #1f2937;
-      color: white;
+      padding: 1.2rem;
+      background-color: var(--accent-teal);
+      color: var(--text-light);
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
+      font-size: 1.15rem;
+      font-weight: 700;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      letter-spacing: 0.02em;
+    }
+
+    .login-box button:hover {
+      background-color: #00A68A; /* Slightly darker teal */
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0, 203, 167, 0.4);
     }
 
     #adminPanel {
       display: none;
+    }
+
+    /* --- Responsive Adjustments --- */
+    @media (max-width: 1200px) {
+      #submissions {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        padding: 2.5rem;
+        gap: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem 1.5rem;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        gap: 0.75rem;
+      }
+
+      .logo img {
+        width: 45px;
+        height: 45px;
+      }
+
+      .page-title {
+        font-size: 2.5rem;
+        margin: 2.5rem 0 1.8rem;
+      }
+
+      .page-title::after {
+        width: 100px;
+        height: 5px;
+      }
+
+      #submissions {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+        gap: 1.8rem;
+      }
+
+      .submission-container {
+        padding: 1.8rem;
+      }
+
+      .submission-actions {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .submission-actions button {
+        max-width: 100%;
+        padding: 1rem;
+      }
+
+      .login-box {
+        padding: 2.5rem;
+      }
+
+      .login-box h2 {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .login-box input {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .login-box button {
+        padding: 1.1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+        .page-title {
+            font-size: 2rem;
+            margin: 2rem 0 1.5rem;
+        }
+        #submissions {
+            padding: 1rem;
+        }
+        .submission-container {
+            padding: 1.5rem;
+        }
+        .login-box {
+            padding: 2rem;
+        }
+        .login-box h2 {
+            font-size: 1.8rem;
+        }
     }
   </style>
 </head>
@@ -217,128 +454,157 @@ select:focus {
     </div>
   </div>
 
-  <!-- Admin Panel (Hidden initially) -->
   <div id="adminPanel">
     <header>
       <a href="#" class="logo">
-        <img src="https://i.ibb.co/YjzJTRP/1735095998384.jpg" alt="Logo">
-        Admin Panel
+        <img src="https://i.ibb.co/YjzJTRP/1735095998384.jpg" alt="Spark Archives Logo">
+        Spark Archives Admin
       </a>
     </header>
 
-    <h1 class="page-title">Manage Entries</h1>
+    <h1 class="page-title">Manage Submissions</h1>
     <div id="submissions"></div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.9/dist/sweetalert2.all.min.js"></script>
   <script>
-  const ADMIN_USERNAME = "sslgadmins";
-const ADMIN_PASSWORD = "sparkarchives";
+    const ADMIN_USERNAME = "sslgadmins";
+    const ADMIN_PASSWORD = "sparkarchives";
 
-function login() {
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
+    function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
 
-  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-    localStorage.setItem("loggedIn", "true");
-    showAdminPanel();
-  } else {
-    Swal.fire("Error", "Invalid credentials!", "error");
-  }
-}
-
-function showAdminPanel() {
-  document.getElementById("loginForm").style.display = "none";
-  document.getElementById("adminPanel").style.display = "block";
-  fetchSubmissions();
-}
-
-function checkLogin() {
-  if (localStorage.getItem("loggedIn") === "true") {
-    showAdminPanel();
-  }
-}
-
-
-async function fetchSubmissions() {
-      const response = await fetch('/admin/submissions');
-      const data = await response.json();
-      const container = document.getElementById('submissions');
-      container.innerHTML = '';
-
-      if (data.length === 0) {
-        container.innerHTML = '<p>No submissions available.</p>';
-        return;
+      if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+        localStorage.setItem("loggedIn", "true");
+        showAdminPanel();
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Access Denied',
+          text: 'Invalid credentials. Please try again.',
+          confirmButtonColor: '#00CBA7' // Match accent color
+        });
       }
+    }
 
-      data.forEach((submission, index) => {
-        const div = document.createElement('div');
-        div.classList.add('submission-container');
+    function showAdminPanel() {
+      document.getElementById("loginForm").style.display = "none";
+      document.getElementById("adminPanel").style.display = "block";
+      fetchSubmissions();
+    }
 
-        div.innerHTML = `
-          <p><strong>Codename:</strong> ${submission.codename}</p>
-          <p><strong>Title:</strong> ${submission.message_title}</p>
+    function checkLogin() {
+      if (localStorage.getItem("loggedIn") === "true") {
+        showAdminPanel();
+      }
+    }
 
-          <p><strong>Message:</strong></p>
-<pre class="message-content">${submission.message}</pre>
+    async function fetchSubmissions() {
+      try {
+        const response = await fetch('/admin/submissions');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        const container = document.getElementById('submissions');
+        container.innerHTML = '';
 
-<p><strong>To Admin:</strong></p>
-<pre class="message-to-admin">${submission.message_to_admin}</pre>
+        if (data.length === 0) {
+          container.innerHTML = '<p style="text-align: center; padding: 3rem; color: var(--text-dark); font-size: 1.2rem; font-weight: 500;">✨ No new submissions available at this time. All caught up! ✨</p>';
+          return;
+        }
 
-          <p><strong>Category:</strong> ${submission.category}</p>
-          <p><strong>Option:</strong> ${submission.option}</p>
+        data.forEach((submission, index) => {
+          const div = document.createElement('div');
+          div.classList.add('submission-container');
 
-          <label for="admin_response_${index}">Admin Response:</label>
-          <textarea id="admin_response_${index}" rows="3" cols="40" required></textarea><br><br>
+          // Removed 'required' from textarea
+          div.innerHTML = `
+            <p class="submission-header">Codename: <strong>${submission.codename}</strong></p>
+            <p class="submission-details">Title: <strong>${submission.message_title}</strong></p>
 
-          <label for="admin_nickname_${index}">Admin Nickname:</label>
-          <select id="admin_nickname_${index}" required>
-          <option value="Admin Xie">Admin Xie</option>
-          <option value="Admin Vylle">Admin Vylle</option>
-          <option value="Admin Jay">Admin Jay</option>
-          <option value="Admin Shiro">Admin Shiro</option>
-          <option value="Admin Lychee">Admin Lychee</option>
-          <option value="Admin Cookie">Admin Cookie</option>
-          <option value="Admin Rielle">Admin Rielle</option>
-          <option value="Admin CLN">Admin CLN</option>
-          <option value="Admin Ivauxn">Admin Ivauxn</option>
-          </select><br><br>
+            <label>Message:</label>
+            <pre class="message-content">${submission.message}</pre>
 
-          <div class="submission-actions">
-            <button class="approve-button" onclick="approveSubmission(${index})">Approve</button>
-            <button class="decline-button" onclick="declineSubmission(${index})">Decline</button>
-          </div>
-        `;
+            <label>Message to Admin:</label>
+            <pre class="message-to-admin">${submission.message_to_admin}</pre>
 
-        container.appendChild(div);
-      });
+            <p class="submission-details">Category: <strong>${submission.category}</strong></p>
+            <p class="submission-details">Option: <strong>${submission.option}</strong></p>
+
+            <label for="admin_response_${index}">Admin Response (Optional):</label>
+            <textarea id="admin_response_${index}" rows="3" placeholder="Type your response here..."></textarea>
+
+            <label for="admin_nickname_${index}">Admin Nickname:</label>
+            <select id="admin_nickname_${index}" required>
+              <option value="">Select Admin</option>
+              <option value="Admin Xie">Admin Xie</option>
+              <option value="Admin Vylle">Admin Vylle</option>
+              <option value="Admin Jay">Admin Jay</option>
+              <option value="Admin Shiro">Admin Shiro</option>
+              <option value="Admin Lychee">Admin Lychee</option>
+              <option value="Admin Cookie">Admin Cookie</option>
+              <option value="Admin Rielle">Admin Rielle</option>
+              <option value="Admin CLN">Admin CLN</option>
+              <option value="Admin Ivauxn">Admin Ivauxn</option>
+            </select>
+
+            <div class="submission-actions">
+              <button class="approve-button" onclick="approveSubmission(${index})">Approve</button>
+              <button class="decline-button" onclick="declineSubmission(${index})">Decline</button>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      } catch (error) {
+        console.error("Failed to fetch submissions:", error);
+        document.getElementById('submissions').innerHTML = '<p style="text-align: center; padding: 3rem; color: var(--danger-red); font-weight: 600;">⚠️ Failed to load submissions. Please check the server connection. ⚠️</p>';
+      }
     }
 
     async function approveSubmission(index) {
       const adminResponse = document.getElementById(`admin_response_${index}`).value;
       const adminNickname = document.getElementById(`admin_nickname_${index}`).value;
 
-      // SweetAlert for approval
+      // Admin response is now optional, so no check for empty adminResponse.trim() here
+      if (!adminNickname) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Missing Info',
+          text: 'Please select an admin nickname.',
+          confirmButtonColor: '#00CBA7'
+        });
+        return;
+      }
+
       Swal.fire({
-        title: 'Are you sure?',
-        text: "You are about to approve this submission.",
-        icon: 'warning',
+        title: 'Confirm Approval?',
+        text: "This action will approve the submission.",
+        icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Approve'
+        confirmButtonColor: '#34D399',
+        cancelButtonColor: '#6B7280',
+        confirmButtonText: 'Yes, Approve!'
       }).then(async (result) => {
         if (result.isConfirmed) {
-          await fetch(`/admin/approve/${index}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ adminResponse, adminNickname })
-          });
-
-          Swal.fire('Approved!', 'The submission has been approved.', 'success');
-          fetchSubmissions();
+          try {
+            const response = await fetch(`/admin/approve/${index}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ adminResponse, adminNickname })
+            });
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            Swal.fire('Approved!', 'The submission has been successfully approved.', 'success');
+            fetchSubmissions();
+          } catch (error) {
+            console.error("Error approving submission:", error);
+            Swal.fire('Error', 'Failed to approve submission. Please try again.', 'error');
+          }
         }
       });
     }
@@ -346,22 +612,30 @@ async function fetchSubmissions() {
     async function declineSubmission(index) {
       Swal.fire({
         title: 'Are you sure?',
-        text: "You are about to decline this submission.",
+        text: "Declining this submission cannot be undone.",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Decline'
+        confirmButtonColor: '#EF4444',
+        cancelButtonColor: '#6B7280',
+        confirmButtonText: 'Yes, Decline!'
       }).then(async (result) => {
         if (result.isConfirmed) {
-          await fetch(`/admin/decline/${index}`, { method: 'POST' });
-          Swal.fire('Declined!', 'The submission has been declined.', 'error');
-          fetchSubmissions();
+          try {
+            const response = await fetch(`/admin/decline/${index}`, { method: 'POST' });
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            Swal.fire('Declined!', 'The submission has been declined.', 'error');
+            fetchSubmissions();
+          } catch (error) {
+            console.error("Error declining submission:", error);
+            Swal.fire('Error', 'Failed to decline submission. Please try again.', 'error');
+          }
         }
       });
     }
 
-    fetchSubmissions();
     checkLogin();
   </script>
 </body>
+</html>
