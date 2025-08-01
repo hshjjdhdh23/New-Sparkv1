@@ -1,396 +1,630 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Spark Archives - Share freely, stay anonymous</title>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Noto Serif SC', serif;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Spark Archives - Share freely, stay anonymous</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-accent: #4A90E2;
+            --secondary-accent: #5CB85C;
+            --light-bg-color: #F7F7F9;
+            --card-bg-color: rgba(255, 255, 255, 0.85);
+            --header-bg-color: rgba(255, 255, 255, 0.95);
+            --text-dark: #333;
+            --text-light: #777;
+            --border-subtle: #DDD;
+            --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --highlight-color: #E6F0FF;
+        }
 
-    body {
-      background: url('https://i.ibb.co/LzThBMW6/1743867588355.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: #fff;
-      min-height: 100vh;
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
 
-    header {
-      display: flex;
-      align-items: center;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 20px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    }
+        body {
+            background: var(--light-bg-color);
+            background-image: linear-gradient(90deg, transparent 0%, var(--highlight-color) 5%, transparent 10%),
+                              linear-gradient(0deg, transparent 0%, var(--highlight-color) 5%, transparent 10%);
+            background-size: 30px 30px;
+            background-attachment: fixed;
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 100px;
+            padding-left: 20px;
+            padding-right: 20px;
+            overflow-x: hidden;
+        }
 
-    header img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      margin-right: 15px;
-    }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            background: var(--header-bg-color);
+            padding: 15px 30px;
+            box-shadow: var(--shadow-soft);
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
 
-    header h1 {
-      font-size: 1.4rem;
-      color: #fff;
-    }
+        header img {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: cover;
+            border: 2px solid var(--primary-accent);
+        }
 
-    #welcome {
+        header h1 {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
 
-  text-align: center;
-  margin: 40px auto;
-}
+        #welcome {
+            width: 100%;
+            max-width: 750px;
+            text-align: center;
+            margin: 30px auto;
+            background: var(--card-bg-color);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(6px);
+            border: 1px solid var(--border-subtle);
+        }
 
-.welcome-content h2 {
-  font-size: 1.5rem;
-  color: #fff;
-  margin-bottom: 10px;
-  font-weight: bold;
-  font-family: 'Noto Serif SC', serif;
-}
+        .welcome-content h3 {
+            font-size: 1.6rem;
+            color: var(--text-dark);
+            margin-bottom: 18px;
+            font-weight: 600;
+        }
 
-.welcome-content p {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  margin: 10px;
-  color: #e0e0e0;
-  font-family: 'Noto Serif SC', serif;
-}
+        .welcome-content p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin: 0 auto;
+            color: var(--text-light);
+            max-width: 600px;
+            min-height: 100px;
+        }
 
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.2em;
+            background-color: var(--text-dark);
+            margin-left: 2px;
+            animation: blinking-cursor 0.75s step-end infinite;
+        }
 
-    #app {
-      max-width: 350px;
-      margin: 10px auto;
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 10px;
-    }
+        @keyframes blinking-cursor {
+            from, to { opacity: 0; }
+            50% { opacity: 1; }
+        }
 
-    .card {
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-    }
+        #app {
+            width: 100%;
+            max-width: 450px;
+            margin: 20px auto 50px auto;
+            padding: 35px;
+            background: var(--card-bg-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(6px);
+            border: 1px solid var(--border-subtle);
+        }
 
-    .card.active {
-      display: flex;
-    }
+        .card {
+            display: none;
+            flex-direction: column;
+            gap: 18px;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
 
-    h2 {
-  font-size: 1.5rem;
-text-align: center;
-  margin-bottom: 20px;
-  opacity: 0;
-  animation: fadeInUp 1.5s forwards;
-  animation-delay: 0.5s;
-}
+        .card.active {
+            display: flex;
+        }
 
-h3 {
-  font-size: 1.5rem;
-  text-align: center;
-  margin-bottom: 10px;
-}
+        .card h3 {
+            font-size: 1.6rem;
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary-accent);
+            font-weight: 700;
+        }
 
-p {
-  font-size: 1rem;
-  color: #555;
-  opacity: 0;
-  animation: fadeInUp 1.5s forwards;
-  animation-delay: 1s;
-}
-    label {
-      font-weight: bold;
-      margin-top: 10px;
-    }
+        label {
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+            font-size: 1rem;
+            opacity: 0.9;
+            display: block;
+        }
 
-    input, select, textarea {
-      padding: 10px;
-      font-size: 1rem;
-      color: white;
-      border-radius: 5px;
-      border: none;
-      background: rgba(0, 0, 0, 0.4);
-      width: 100%;
-      margin-bottom: 15px;
-    }
+        input, select, textarea {
+            padding: 14px;
+            font-size: 1rem;
+            color: var(--text-dark);
+            border-radius: 8px;
+            border: 1px solid var(--border-subtle);
+            background: #F0F0F0;
+            width: 100%;
+            margin-bottom: 25px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+        }
 
-    button {
-  padding: 10px 20px;
-  background-color: #2c98f0;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
+        input::placeholder, textarea::placeholder {
+            color: #BBB;
+        }
 
-button:hover {
-  background-color: #2176c7;
-}
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+            background-color: #FFF;
+        }
 
-    .swal2-circle-img {
-  border-radius: 50% !important;
-  object-fit: cover;
-}
+        button {
+            padding: 14px 30px;
+            background-color: var(--primary-accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 4px 10px rgba(0, 0, 0, 0.1);
+            letter-spacing: 0.5px;
+        }
 
-.watermark {
-  position: fixed;
-  bottom: 10px;
-  right: 15px;
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 1);
-  background: rgba(0, 0, 0, 0.8);
-  font-family: 'Noto Serif SC', serif;
-  padding: 10px;
-  border-radius: 30px;
-  pointer-events: none;
-  user-select: none;
-}
+        button:hover {
+            background-color: #3A7BBF;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
 
-.swal2-circle-img {
-  border-radius: 50%;
-  object-fit: cover;
-}
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
-.custom-swal-popup {
-  border-radius: 16px;
-  padding: 30px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-  font-family: 'Noto Serif SC', serif;
-  backdrop-filter: blur(8px);
-  /* Apply the blur effect */
-}
+        .watermark {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            font-size: 0.8rem;
+            color: rgba(0, 0, 0, 10);
+            background: rgba(255, 255, 255, 0.6);
+            padding: 10px 18px;
+            border-radius: 20px;
+            pointer-events: none;
+            user-select: none;
+            opacity: 0.7;
+            z-index: 999;
+            backdrop-filter: blur(4px);
+            border: 3px solid rgba(0, 0, 0, 0.05);
+        }
 
-.custom-swal-title {
-  font-size: 1rem;
-  font-weight: 700;
-  margin-bottom: 10px;
-  color: #ffffff;
-}
+        .swal2-popup {
+            background: linear-gradient(135deg, #F9F9F9, #F0F0F0) !important;
+            border-radius: 15px !important;
+            padding: 30px !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+            font-family: 'Montserrat', sans-serif !important;
+            backdrop-filter: blur(8px) !important;
+            color: var(--text-dark) !important;
+            border: 1px solid var(--border-subtle) !important;
+        }
 
-.custom-swal-button {
-  font-size: 1rem;
-  padding: 10px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-}
+        .swal2-title {
+            font-size: 1.4rem !important;
+            font-weight: 700 !important;
+            margin-bottom: 20px !important;
+            color: var(--primary-accent) !important;
+        }
 
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(30px);
-  }
+        .swal2-html-container {
+            font-size: 1rem !important;
+            color: var(--text-dark) !important;
+            margin-bottom: 25px !important;
+        }
 
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+        .swal2-image {
+            border-radius: 50% !important;
+            object-fit: cover !important;
+            border: 3px solid var(--primary-accent) !important;
+        }
 
-  </style>
+        .swal2-confirm.swal2-styled {
+            background-color: var(--secondary-accent) !important;
+            color: white !important;
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+            font-size: 1.05rem !important;
+            padding: 12px 25px !important;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease !important;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .swal2-confirm.swal2-styled:hover {
+            background-color: #449D48 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 90px;
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+
+            header {
+                padding: 12px 25px;
+            }
+
+            header img {
+                width: 50px;
+                height: 50px;
+            }
+
+            header h1 {
+                font-size: 1.7rem;
+            }
+
+            #welcome {
+                margin: 25px auto;
+                padding: 25px;
+            }
+
+            .welcome-content h3 {
+                font-size: 1.6rem;
+            }
+
+            .welcome-content p {
+                font-size: 1rem;
+            }
+
+            #app {
+                padding: 25px;
+                max-width: 95%;
+            }
+
+            .card h3 {
+                font-size: 1.4rem;
+            }
+
+            label {
+                font-size: 0.95rem;
+            }
+
+            input, select, textarea {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+
+            button {
+                font-size: 0.95rem;
+                padding: 12px 25px;
+            }
+
+            .watermark {
+                font-size: 0.75rem;
+                bottom: 20px;
+                right: 20px;
+                padding: 8px 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding-top: 80px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            header {
+                padding: 10px 15px;
+            }
+
+            header img {
+                width: 45px;
+                height: 45px;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            #welcome {
+                margin: 20px auto;
+                padding: 20px;
+            }
+
+            .welcome-content h3 {
+                font-size: 1.4rem;
+            }
+
+            .welcome-content p {
+                font-size: 0.9rem;
+            }
+
+            #app {
+                padding: 20px;
+            }
+
+            .card h3 {
+                font-size: 1.3rem;
+            }
+
+            input, select, textarea {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+
+            .watermark {
+                font-size: 0.7rem;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <header>
-    <img src="https://i.ibb.co/YFgznXZM/received-964135092547666.jpg" alt="Logo" />
-    <h1>Spark Archives</h1>
-  </header>
+    <header>
+        <img src="https://i.ibb.co/YFgznXZM/received-964135092547666.jpg" alt="Logo" />
+        <h1>Spark Archives</h1>
+    </header>
 
-<section id="welcome">
-  <div class="welcome-content">
-    <h3>Welcome to Spark Archives</h3>
-    <p style="font-size: 15px;">
-      “ Spark Archives is your safe space to express freely and anonymously. Whether it's a confession, a suggestion, or just a thought — your voice matters here. ”
-    </p>
-  </div>
-</section>
+    <section id="welcome">
+        <div class="welcome-content">
+            <h3>Welcome to Spark Archives</h3>
+            <p id="typewriter-paragraph"></p>
+        </div>
+    </section>
 
+    <div id="app">
+        <form id="submissionForm">
+            <div class="card step step-1 active">
+                <h3>FILL-UP FORM</h3>
+                <label for="category">Category:</label>
+                <select id="category" required>
+                    <option value="">Select a Category</option>
+                    <option value="CONFESSION">Confession</option>
+                    <option value="ENCOURAGEMENT">Encouragement</option>
+                    <option value="QUERY">Query</option>
+                    <option value="RANT">Rant</option>
+                    <option value="THOUGHT">Thought</option>
+                    <option value="SUGGESTIONS">Suggestion</option>
+                    <option value="OTHERS">Others</option>
+                </select>
+                <button type="button" onclick="nextStep()">Next</button>
+            </div>
 
-  <div id="app">
-    <form id="submissionForm">
-      <div class="card step step-1 active">
-        <h3>FILL-UP FORM</h3>
-        <label for="category">Category:</label>
-        <select id="category" required>
-          <option value="">Select a Category</option>
-          <option value="CONFESSION">Confession</option>
-          <option value="ENCOURAGEMENT">Encouragement</option>
-          <option value="QUERY">Query</option>
-          <option value="RANT">Rant</option>
-          <option value="THOUGHT">Thought</option>
-          <option value="SUGGESTIONS">Suggestion</option>
-          <option value="OTHERS">Others</option>
-        </select>
-        <button type="button" onclick="nextStep()">Next</button>
-      </div>
+            <div class="card step step-2">
+                <h3>FILL-UP FORM</h3>
+                <label for="message_title">Message Title:</label>
+                <input type="text" id="message_title" required>
+                <button type="button" onclick="nextStep()">Next</button>
+            </div>
 
-      <div class="card step step-2">
-        <h3>FILL-UP FORM</h3>
-        <label for="message_title">Message Title:</label>
-        <input type="text" id="message_title" required>
-        <button type="button" onclick="nextStep()">Next</button>
-      </div>
+            <div class="card step step-3">
+                <h3>FILL-UP FORM</h3>
+                <label for="message">Message:</label>
+                <textarea id="message" rows="4" required></textarea>
+                <button type="button" onclick="nextStep()">Next</button>
+            </div>
 
-      <div class="card step step-3">
-        <h3>FILL-UP FORM</h3>
-        <label for="message">Message:</label>
-        <textarea id="message" rows="4" required></textarea>
-        <button type="button" onclick="nextStep()">Next</button>
-      </div>
+            <div class="card step step-4">
+                <h3>FILL-UP FORM</h3>
+                <label for="message_to_admin">Message to Admin:</label>
+                <textarea id="message_to_admin" rows="4" required></textarea>
+                <button type="button" onclick="nextStep()">Next</button>
+            </div>
 
-      <div class="card step step-4">
-        <h3>FILL-UP FORM</h3>
-        <label for="message_to_admin">Message to Admin:</label>
-        <textarea id="message_to_admin" rows="4" required></textarea>
-        <button type="button" onclick="nextStep()">Next</button>
-      </div>
+            <div class="card step step-5">
+                <h3>FILL-UP FORM</h3>
+                <label for="codename">Codename:</label>
+                <input type="text" id="codename" required>
+                <button type="button" onclick="nextStep()">Next</button>
+            </div>
 
-      <div class="card step step-5">
-        <h3>FILL-UP FORM</h3>
-        <label for="codename">Codename:</label>
-        <input type="text" id="codename" required>
-        <button type="button" onclick="nextStep()">Next</button>
-      </div>
+            <div class="card step step-6">
+                <h3>FILL-UP FORM</h3>
+                <label for="option">Sender Type:</label>
+                <select id="option" required>
+                    <option value="">Select a Type</option>
+                    <option value="MONTESSORIAN">Montessorian</option>
+                    <option value="NON-MONTESSORIAN">Non-Montessorian</option>
+                </select>
+                <button type="button" onclick="nextStep()">Next</button>
+            </div>
 
-      <div class="card step step-6">
-        <h3>FILL-UP FORM</h3>
-        <label for="option">Sender Type:</label>
-        <select id="option" required>
-          <option value="">Select a Type</option>
-          <option value="MONTESSORIAN">Montessorian</option>
-          <option value="NON-MONTESSORIAN">Non-Montessorian</option>
-        </select>
-        <button type="button" onclick="nextStep()">Next</button>
-      </div>
+            <div class="card step step-7">
+                <h3>SUBMISSION</h3>
+                <p style="text-align: center;">Once submitted, changes may not be possible.</p><br>
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
 
-      <div class="card step step-7">
-        <h3>SUBMISSION</h3>
-        <p style="text-align: center;" type="text" id="photo_link">Once submitted, changes may not be possible.</p><br>
-        <button type="submit">Submit</button>
-      </div>
-    </form>
-  </div>
+    <script>
+        Swal.fire({
+            title: 'WELCOME TO THE SPARK ARCHIVES',
+            html: `<p style="font-size: 0.95rem; color: var(--text-dark);">Share your thoughts anonymously and freely!</p>`,
+            imageUrl: 'https://i.ibb.co/YFgznXZM/received-964135092547666.jpg',
+            imageAlt: 'Logo',
+            imageWidth: 80,
+            imageHeight: 80,
+            background: 'linear-gradient(135deg, #F9F9F9, #F0F0F0)',
+            backdrop: 'rgba(0, 0, 0, 0.1)',
+            color: 'var(--text-dark)',
+            confirmButtonColor: 'var(--secondary-accent)',
+            confirmButtonText: "Let's Go!",
+            customClass: {
+                image: 'swal2-image',
+                popup: 'swal2-popup',
+                title: 'swal2-title',
+                confirmButton: 'swal2-confirm'
+            }
+        });
 
-  <script>
-    Swal.fire({
-  title: 'WELCOME TO THE SPARK ARCHIVES',
-  html: `<p style="font-size: 1rem; color: #f0f0f0;">Share your thoughts anonymously and freely!</p>`,
-  imageUrl: 'https://i.ibb.co/YFgznXZM/received-964135092547666.jpg',
-  imageAlt: 'Logo',
-  imageWidth: 90,
-  imageHeight: 90,
-  background: 'linear-gradient(135deg, rgba(30, 30, 47, 0.7), rgba(43, 43, 68, 0.7))',
-  backdrop: 'rgba(0, 0, 0, 0.3)',
-  color: '#fff',
-  confirmButtonColor: '#00c9a7',
-  confirmButtonText: "Let's Go!",
-  customClass: {
-    image: 'swal2-circle-img',
-    popup: 'custom-swal-popup',
-    title: 'custom-swal-title',
-    confirmButton: 'custom-swal-button'
-  }
-});
+        let currentStep = 1;
 
-    let currentStep = 1;
+        function nextStep() {
+            const currentCard = document.querySelector(`.card.step-${currentStep}`);
+            const inputs = currentCard.querySelectorAll('input, textarea, select');
+            let allValid = true;
 
-    function nextStep() {
-      const currentCard = document.querySelector(`.card.step-${currentStep}`);
-      const inputs = currentCard.querySelectorAll('input, textarea, select');
-      let allValid = true;
+            inputs.forEach((input) => {
+                if (input.required && !input.value.trim()) {
+                    allValid = false;
+                    input.style.borderColor = 'red';
+                } else {
+                    input.style.borderColor = '';
+                }
+            });
 
-      inputs.forEach((input) => {
-        if (input.id !== "photo_link") {
-          if (input.required && !input.value.trim()) {
-            allValid = false;
-            input.style.borderColor = 'red';
-          } else {
-            input.style.borderColor = '';
-          }
+            if (allValid) {
+                currentCard.classList.remove('active');
+                currentStep++;
+                const nextCard = document.querySelector(`.card.step-${currentStep}`);
+                if (nextCard) {
+                    nextCard.classList.add('active');
+                } else {
+                    console.log("End of form steps. Ready for submission.");
+                }
+            } else {
+                Swal.fire({
+                    title: 'Please Fill All Fields',
+                    text: 'Make sure to complete all required fields before proceeding.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        popup: 'swal2-popup',
+                        title: 'swal2-title',
+                        confirmButton: 'swal2-confirm'
+                    }
+                });
+            }
         }
-      });
 
-      if (allValid) {
-        currentCard.classList.remove('active');
-        currentStep++;
-        document.querySelector(`.card.step-${currentStep}`).classList.add('active');
-      } else {
-        Swal.fire({
-          title: 'Please Fill All Fields',
-          text: 'Make sure to complete all required fields before proceeding.',
-          icon: 'warning',
-          confirmButtonText: 'OK',
+        document.getElementById("submissionForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+
+            const data = {
+                codename: document.getElementById('codename').value,
+                message_title: document.getElementById('message_title').value,
+                message: document.getElementById('message').value,
+                message_to_admin: document.getElementById('message_to_admin').value,
+                category: document.getElementById('category').value,
+                option: document.getElementById('option').value,
+            };
+
+            const response = await fetch('/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.text();
+            if (response.ok) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Your message has been successfully sent for review.',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        popup: 'swal2-popup',
+                        title: 'swal2-title',
+                        confirmButton: 'swal2-confirm'
+                    }
+                }).then(() => {
+                    document.getElementById('submissionForm').reset();
+                    document.querySelector(`.card.step-${currentStep}`).classList.remove('active');
+                    currentStep = 1;
+                    document.querySelector(`.card.step-1`).classList.add('active');
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: result || 'Something went wrong. Please try again.',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        popup: 'swal2-popup',
+                        title: 'swal2-title',
+                        confirmButton: 'swal2-confirm'
+                    }
+                });
+            }
         });
-      }
-    }
 
-    document.getElementById("submissionForm").addEventListener("submit", async function(e) {
-      e.preventDefault();
+        function typeWriter(elementId, text, speed) {
+            let i = 0;
+            let targetElement = document.getElementById(elementId);
+            const cursorSpan = document.createElement('span');
+            cursorSpan.className = 'cursor';
+            
+            targetElement.innerHTML = '';
+            targetElement.appendChild(cursorSpan);
 
-      const data = {
-        codename: document.getElementById('codename').value,
-        message_title: document.getElementById('message_title').value,
-        message: document.getElementById('message').value,
-        message_to_admin: document.getElementById('message_to_admin').value,
-        category: document.getElementById('category').value,
-        option: document.getElementById('option').value,
-        photo_link: document.getElementById('photo_link').value
-      };
-
-      const response = await fetch('/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-
-      const result = await response.text();
-      if (response.ok) {
-        Swal.fire({
-          title: 'Success!',
-          text: 'Your message has been successfully sent for review.',
-          icon: 'success',
-          confirmButtonText: 'OK'
-        }).then(() => {
-          document.getElementById('submissionForm').reset();
-          document.querySelector(`.card.step-${currentStep}`).classList.remove('active');
-          currentStep = 1;
-          document.querySelector(`.card.step-1`).classList.add('active');
-        });
-      } else {
-        Swal.fire({
-          title: 'Error!',
-          text: result,
-          icon: 'error',
-          confirmButtonText: 'OK'
-        });
-      }
-    });
+            function type() {
+                if (i < text.length) {
+                    targetElement.innerHTML = text.substring(0, i + 1) + cursorSpan.outerHTML;
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    targetElement.innerHTML = text;
+                }
+            }
+            type();
+        }
 
         window.addEventListener('DOMContentLoaded', function () {
-    const audio = document.getElementById('bgMusic');
+            const audio = document.getElementById('bgMusic');
+            audio.play().catch(() => {
+                document.addEventListener('click', () => {
+                    audio.play();
+                }, { once: true });
+            });
 
-    // Try autoplay directly
-    audio.play().catch(() => {
-      // If autoplay is blocked, wait for user interaction
-      document.addEventListener('click', () => {
-        audio.play();
-      }, { once: true });
-    });
-  });
-  </script>
-  <div class="watermark">Created by: Kiff Hyacinth Pon</div>
-  <body>
+            const paragraphText = '“ Spark Archives is your safe space to express freely and anonymously. Whether it\'s a confession, a suggestion, or just a thought — your voice matters here. ”';
+            typeWriter('typewriter-paragraph', paragraphText, 50);
+        });
+    </script>
+    <div class="watermark">Created by: Kiff Hyacinth Pon</div>
     <audio id="bgMusic" loop>
-      <source src="blue.mp3" type="audio/mpeg">
+        <source src="blue.mp3" type="audio/mpeg">
     </audio>
-
-
 </body>
 </html>
