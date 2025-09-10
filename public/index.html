@@ -3,406 +3,383 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Spark Archives - Share freely, stay anonymous</title>
+    <title>Spark Archives - Share Freely, Anonymously</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
-        :root {
-            --primary-accent: #4A90E2;
-            --secondary-accent: #5CB85C;
-            --light-bg-color: #F7F7F9;
-            --card-bg-color: rgba(255, 255, 255, 0.85);
-            --header-bg-color: rgba(255, 255, 255, 0.95);
-            --text-dark: #333;
-            --text-light: #777;
-            --border-subtle: #DDD;
-            --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.08);
-            --highlight-color: #E6F0FF;
-        }
+    :root {
+        --bg-primary: #eef4f9;
+        --bg-card: rgba(255, 255, 255, 0.7);
+        --bg-input: #f8faff;
+        --color-primary: #1c2b3a;
+        --color-secondary: #0077b6;
+        --color-accent: #00b4d8;
+        --text-light: #6e7a8c;
+        --card-radius: 20px;
+        --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.08);
+        --shadow-strong: 0 15px 60px rgba(0, 0, 0, 0.15);
+        --transition-fast: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Montserrat', sans-serif;
-        }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', sans-serif;
+        transition: color var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
 
-        body {
-            background: var(--light-bg-color);
-            background-image: linear-gradient(90deg, transparent 0%, var(--highlight-color) 5%, transparent 10%),
-                              linear-gradient(0deg, transparent 0%, var(--highlight-color) 5%, transparent 10%);
-            background-size: 30px 30px;
-            background-attachment: fixed;
-            color: var(--text-dark);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 100px;
-            padding-left: 20px;
-            padding-right: 20px;
-            overflow-x: hidden;
-        }
+    body {
+        background: var(--bg-primary);
+        color: var(--color-primary);
+        line-height: 1.6;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+    }
 
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            background: var(--header-bg-color);
-            padding: 15px 30px;
-            box-shadow: var(--shadow-soft);
-            z-index: 1000;
-            backdrop-filter: blur(8px);
-            border-bottom: 1px solid var(--border-subtle);
-        }
+    #spark-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.8;
+    }
 
-        header img {
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            margin-right: 15px;
-            object-fit: cover;
-            border: 2px solid var(--primary-accent);
-        }
+    header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        padding: 1.5rem 2rem;
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(15px);
+        box-shadow: var(--shadow-soft);
+        transition: padding var(--transition-fast), box-shadow var(--transition-fast);
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+    }
 
-        header h1 {
-            font-size: 1.8rem;
-            color: var(--text-dark);
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
+    header.scrolled {
+        padding: 1rem 2rem;
+        box-shadow: var(--shadow-strong);
+    }
 
-        #welcome {
-            width: 100%;
-            max-width: 750px;
-            text-align: center;
-            margin: 30px auto;
-            background: var(--card-bg-color);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: var(--shadow-soft);
-            backdrop-filter: blur(6px);
-            border: 1px solid var(--border-subtle);
-        }
+    .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
 
-        .welcome-content h3 {
-            font-size: 1.6rem;
-            color: var(--text-dark);
-            margin-bottom: 18px;
-            font-weight: 600;
-        }
+    header img {
+        width: 55px;
+        height: 55px;
+        border-radius: 14px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        border: 2px solid var(--color-accent);
+    }
 
-        .welcome-content p {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            margin: 0 auto;
-            color: var(--text-light);
-            max-width: 600px;
-            min-height: 100px;
-        }
+    @keyframes rotate-360 {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
 
-        .cursor {
-            display: inline-block;
-            width: 3px;
-            height: 1.2em;
-            background-color: var(--text-dark);
-            margin-left: 2px;
-            animation: blinking-cursor 0.75s step-end infinite;
-        }
+    header img.rotate-on-hover:hover {
+        animation: rotate-360 2s linear infinite;
+    }
 
-        @keyframes blinking-cursor {
-            from, to { opacity: 0; }
-            50% { opacity: 1; }
-        }
+    header h1 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 2.2rem;
+        font-weight: 700;
+        background: linear-gradient(45deg, var(--color-secondary), var(--color-accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 
-        #app {
-            width: 100%;
-            max-width: 450px;
-            margin: 20px auto 50px auto;
-            padding: 35px;
-            background: var(--card-bg-color);
-            border-radius: 12px;
-            box-shadow: var(--shadow-soft);
-            backdrop-filter: blur(6px);
-            border: 1px solid var(--border-subtle);
-        }
+    #welcome {
+        text-align: center;
+        padding: 5rem 1.5rem 3rem;
+        animation: fadeIn 1.5s ease-out;
+        max-width: 900px;
+        margin: auto;
+    }
 
-        .card {
-            display: none;
-            flex-direction: column;
-            gap: 18px;
-            animation: fadeIn 0.5s ease-out forwards;
-        }
+    #welcome h3 {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 2.5rem;
+        color: var(--color-primary);
+        margin-bottom: 0.75rem;
+    }
 
-        .card.active {
-            display: flex;
-        }
+    #welcome p {
+        font-size: 1.1rem;
+        color: var(--text-light);
+        max-width: 700px;
+        margin: 0 auto;
+        line-height: 1.8;
+        font-weight: 400;
+    }
 
-        .card h3 {
-            font-size: 1.6rem;
-            text-align: center;
-            margin-bottom: 30px;
-            color: var(--primary-accent);
-            font-weight: 700;
-        }
+    #app {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        padding: 1.5rem;
+        position: relative;
+        z-index: 10;
+    }
 
-        label {
-            font-weight: 500;
-            margin-bottom: 5px;
-            color: var(--text-dark);
-            font-size: 1rem;
-            opacity: 0.9;
-            display: block;
-        }
+    form {
+        width: 100%;
+        max-width: 650px;
+        position: relative;
+    }
 
-        input, select, textarea {
-            padding: 14px;
-            font-size: 1rem;
-            color: var(--text-dark);
-            border-radius: 8px;
-            border: 1px solid var(--border-subtle);
-            background: #F0F0F0;
-            width: 100%;
-            margin-bottom: 25px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-        }
+    .card {
+        display: none;
+        backdrop-filter: blur(15px);
+        background: var(--bg-card);
+        padding: 3rem;
+        border-radius: var(--card-radius);
+        box-shadow: var(--shadow-strong);
+        animation: cardSlide 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        transform: translateY(20px);
+        opacity: 0;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
 
-        input::placeholder, textarea::placeholder {
-            color: #BBB;
-        }
+    .card.active {
+        display: block;
+        transform: translateY(0);
+        opacity: 1;
+    }
 
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary-accent);
-            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
-            background-color: #FFF;
-        }
+    .card h3 {
+        font-family: 'Poppins', sans-serif;
+        margin-bottom: 2rem;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--color-primary);
+        text-align: center;
+        position: relative;
+        letter-spacing: -0.5px;
+    }
 
-        button {
-            padding: 14px 30px;
-            background-color: var(--primary-accent);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 1.05rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-            box-shadow: 4px 10px rgba(0, 0, 0, 0.1);
-            letter-spacing: 0.5px;
-        }
+    .card h3::after {
+        content: "";
+        width: 80px;
+        height: 5px;
+        background: linear-gradient(90deg, var(--color-secondary), var(--color-accent));
+        display: block;
+        margin: 0.75rem auto 0;
+        border-radius: 3px;
+    }
 
-        button:hover {
-            background-color: #3A7BBF;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-        }
+    #progress-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2.5rem;
+        padding: 0 1rem;
+        position: relative;
+    }
 
-        button:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
+    #progress-container::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: #d4e0eb;
+        z-index: 1;
+        transform: translateY(-50%);
+    }
 
-        .watermark {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            font-size: 0.8rem;
-            color: rgba(0, 0, 0, 10);
-            background: rgba(255, 255, 255, 0.6);
-            padding: 10px 18px;
-            border-radius: 20px;
-            pointer-events: none;
-            user-select: none;
-            opacity: 0.7;
-            z-index: 999;
-            backdrop-filter: blur(4px);
-            border: 3px solid rgba(0, 0, 0, 0.05);
-        }
+    .progress-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        position: relative;
+        z-index: 2;
+    }
 
-        .swal2-popup {
-            background: linear-gradient(135deg, #F9F9F9, #F0F0F0) !important;
-            border-radius: 15px !important;
-            padding: 30px !important;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
-            font-family: 'Montserrat', sans-serif !important;
-            backdrop-filter: blur(8px) !important;
-            color: var(--text-dark) !important;
-            border: 1px solid var(--border-subtle) !important;
-        }
+    .progress-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #eef4f9;
+        border: 2px solid #a8c0d8;
+        color: var(--text-light);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.1rem;
+        font-weight: 600;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        z-index: 2;
+    }
 
-        .swal2-title {
-            font-size: 1.4rem !important;
-            font-weight: 700 !important;
-            margin-bottom: 20px !important;
-            color: var(--primary-accent) !important;
-        }
+    .progress-step.active .progress-circle {
+        background: linear-gradient(45deg, var(--color-secondary), var(--color-accent));
+        border-color: #ffffff;
+        color: #fff;
+        transform: scale(1.2);
+        box-shadow: 0 0 15px rgba(0, 119, 182, 0.7), 0 0 30px rgba(0, 180, 216, 0.5);
+    }
 
-        .swal2-html-container {
-            font-size: 1rem !important;
-            color: var(--text-dark) !important;
-            margin-bottom: 25px !important;
-        }
+    .progress-step.active:not(:last-child)::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 50%;
+        height: 4px;
+        background: linear-gradient(90deg, var(--color-secondary), var(--color-accent));
+        z-index: 1;
+        transform: translateY(-50%);
+        transition: width 0.5s ease-in-out;
+    }
+    .progress-step:last-child::before {
+        display: none;
+    }
 
-        .swal2-image {
-            border-radius: 50% !important;
-            object-fit: cover !important;
-            border: 3px solid var(--primary-accent) !important;
-        }
+    .input-group {
+        position: relative;
+        margin-bottom: 2rem;
+    }
 
-        .swal2-confirm.swal2-styled {
-            background-color: var(--secondary-accent) !important;
-            color: white !important;
-            border-radius: 8px !important;
-            font-weight: 600 !important;
-            font-size: 1.05rem !important;
-            padding: 12px 25px !important;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease !important;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
-        }
+    label.floating-label {
+        position: absolute;
+        left: 1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1rem;
+        color: var(--text-light);
+        pointer-events: none;
+        transition: all var(--transition-fast);
+        z-index: 1;
+    }
 
-        .swal2-confirm.swal2-styled:hover {
-            background-color: #449D48 !important;
-            transform: translateY(-2px) !important;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15) !important;
-        }
+    input:focus + label,
+    textarea:focus + label,
+    input:not(:placeholder-shown) + label,
+    textarea:not(:placeholder-shown) + label {
+        top: 0;
+        left: 1.25rem;
+        font-size: 0.85rem;
+        color: var(--color-accent);
+        background: var(--bg-card);
+        padding: 0 0.5rem;
+        transform: translateY(-50%);
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    input, select, textarea {
+        width: 100%;
+        padding: 1.25rem 1.5rem;
+        border: 2px solid #a8c0d8;
+        border-radius: 16px;
+        font-size: 1rem;
+        transition: border var(--transition-fast), box-shadow var(--transition-fast);
+        background: var(--bg-input);
+        color: var(--color-primary);
+        outline: none;
+    }
 
-        @media (max-width: 768px) {
-            body {
-                padding-top: 90px;
-                padding-left: 15px;
-                padding-right: 15px;
-            }
+    input:focus, select:focus, textarea:focus {
+        border-color: var(--color-accent);
+        box-shadow: 0 0 0 5px rgba(0, 180, 216, 0.15);
+        background: #ffffff;
+    }
 
-            header {
-                padding: 12px 25px;
-            }
+    textarea {
+        resize: vertical;
+    }
 
-            header img {
-                width: 50px;
-                height: 50px;
-            }
+    button {
+        width: 100%;
+        padding: 1.25rem;
+        border: none;
+        border-radius: 16px;
+        background: linear-gradient(45deg, var(--color-secondary), var(--color-accent));
+        color: #fff;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
 
-            header h1 {
-                font-size: 1.7rem;
-            }
+    button::before {
+        content: '';
+        position: absolute;
+        top: -100%;
+        left: -100%;
+        width: 300%;
+        height: 300%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+        opacity: 0;
+        transform: scale(0);
+        transition: all 0.4s ease;
+        z-index: -1;
+    }
 
-            #welcome {
-                margin: 25px auto;
-                padding: 25px;
-            }
+    button:hover::before {
+        opacity: 1;
+        transform: scale(1);
+    }
 
-            .welcome-content h3 {
-                font-size: 1.6rem;
-            }
+    button:hover {
+        box-shadow: 0 10px 40px rgba(0, 180, 216, 0.4);
+        transform: translateY(-2px);
+    }
 
-            .welcome-content p {
-                font-size: 1rem;
-            }
+    button:active {
+        transform: translateY(0);
+        box-shadow: none;
+    }
 
-            #app {
-                padding: 25px;
-                max-width: 95%;
-            }
+    .watermark {
+        text-align: center;
+        font-size: 0.85rem;
+        padding: 2rem;
+        color: var(--text-light);
+        letter-spacing: 0.5px;
+    }
 
-            .card h3 {
-                font-size: 1.4rem;
-            }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes cardSlide { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-            label {
-                font-size: 0.95rem;
-            }
-
-            input, select, textarea {
-                padding: 12px;
-                font-size: 0.95rem;
-            }
-
-            button {
-                font-size: 0.95rem;
-                padding: 12px 25px;
-            }
-
-            .watermark {
-                font-size: 0.75rem;
-                bottom: 20px;
-                right: 20px;
-                padding: 8px 15px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding-top: 80px;
-                padding-left: 10px;
-                padding-right: 10px;
-            }
-
-            header {
-                padding: 10px 15px;
-            }
-
-            header img {
-                width: 45px;
-                height: 45px;
-            }
-
-            header h1 {
-                font-size: 1.5rem;
-            }
-
-            #welcome {
-                margin: 20px auto;
-                padding: 20px;
-            }
-
-            .welcome-content h3 {
-                font-size: 1.4rem;
-            }
-
-            .welcome-content p {
-                font-size: 0.9rem;
-            }
-
-            #app {
-                padding: 20px;
-            }
-
-            .card h3 {
-                font-size: 1.3rem;
-            }
-
-            input, select, textarea {
-                padding: 10px;
-                font-size: 0.9rem;
-            }
-
-            button {
-                padding: 10px 20px;
-                font-size: 0.9rem;
-            }
-
-            .watermark {
-                font-size: 0.7rem;
-                bottom: 15px;
-                right: 15px;
-            }
-        }
+    @media (max-width: 768px) {
+        #welcome { padding-top: 3rem; }
+        #welcome h3 { font-size: 2rem; }
+        #welcome p { font-size: 1rem; }
+        .card { padding: 2rem; }
+        button { font-size: 1rem; }
+    }
     </style>
 </head>
 <body>
+    <canvas id="spark-canvas"></canvas>
 
     <header>
-        <img src="https://i.ibb.co/YFgznXZM/received-964135092547666.jpg" alt="Logo" />
-        <h1>Spark Archives</h1>
+        <div class="logo-container">
+            <img src="https://i.ibb.co/YFgznXZM/received-964135092547666.jpg" alt="Logo" class="rotate-on-hover"/>
+            <h1>Spark Archives</h1>
+        </div>
     </header>
 
     <section id="welcome">
@@ -414,100 +391,246 @@
 
     <div id="app">
         <form id="submissionForm">
+            <div id="progress-container">
+                <div class="progress-step active" data-step="1">
+                    <span class="progress-circle"><i class="fas fa-edit"></i></span>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <span class="progress-circle"><i class="fas fa-heading"></i></span>
+                </div>
+                <div class="progress-step" data-step="3">
+                    <span class="progress-circle"><i class="fas fa-file-alt"></i></span>
+                </div>
+                <div class="progress-step" data-step="4">
+                    <span class="progress-circle"><i class="fas fa-envelope-open-text"></i></span>
+                </div>
+                <div class="progress-step" data-step="5">
+                    <span class="progress-circle"><i class="fas fa-user-secret"></i></span>
+                </div>
+                <div class="progress-step" data-step="6">
+                    <span class="progress-circle"><i class="fas fa-user-friends"></i></span>
+                </div>
+                <div class="progress-step" data-step="7">
+                    <span class="progress-circle"><i class="fas fa-check-circle"></i></span>
+                </div>
+            </div>
+
             <div class="card step step-1 active">
-                <h3>FILL-UP FORM</h3>
-                <label for="category">Category:</label>
-                <select id="category" required>
-                    <option value="">Select a Category</option>
-                    <option value="CONFESSION">Confession</option>
-                    <option value="ENCOURAGEMENT">Encouragement</option>
-                    <option value="QUERY">Query</option>
-                    <option value="RANT">Rant</option>
-                    <option value="THOUGHT">Thought</option>
-                    <option value="SUGGESTIONS">Suggestion</option>
-                    <option value="OTHERS">Others</option>
-                </select>
+                <h3>Share Your Spark</h3>
+                <div class="input-group">
+                    <select id="category" required>
+                        <option value="" disabled selected>Select a Category</option>
+                        <option value="CONFESSION">Confession</option>
+                        <option value="ENCOURAGEMENT">Encouragement</option>
+                        <option value="QUERY">Query</option>
+                        <option value="RANT">Rant</option>
+                        <option value="THOUGHT">Thought</option>
+                        <option value="SUGGESTIONS">Suggestion</option>
+                        <option value="OTHERS">Others</option>
+                    </select>
+                </div>
                 <button type="button" onclick="nextStep()">Next</button>
             </div>
 
             <div class="card step step-2">
-                <h3>FILL-UP FORM</h3>
-                <label for="message_title">Message Title:</label>
-                <input type="text" id="message_title" required>
+                <h3>Share Your Spark</h3>
+                <div class="input-group">
+                    <input type="text" id="message_title" placeholder=" " required>
+                    <label for="message_title" class="floating-label">Message Title</label>
+                </div>
                 <button type="button" onclick="nextStep()">Next</button>
             </div>
 
             <div class="card step step-3">
-                <h3>FILL-UP FORM</h3>
-                <label for="message">Message:</label>
-                <textarea id="message" rows="4" required></textarea>
+                <h3>Share Your Spark</h3>
+                <div class="input-group">
+                    <textarea id="message" rows="6" placeholder=" " required></textarea>
+                    <label for="message" class="floating-label">Message</label>
+                </div>
                 <button type="button" onclick="nextStep()">Next</button>
             </div>
 
             <div class="card step step-4">
-                <h3>FILL-UP FORM</h3>
-                <label for="message_to_admin">Message to Admin:</label>
-                <textarea id="message_to_admin" rows="4" required></textarea>
+                <h3>Share Your Spark</h3>
+                <div class="input-group">
+                    <textarea id="message_to_admin" rows="4" placeholder=" "></textarea>
+                    <label for="message_to_admin" class="floating-label">Message to Admin (Optional)</label>
+                </div>
                 <button type="button" onclick="nextStep()">Next</button>
             </div>
 
             <div class="card step step-5">
-                <h3>FILL-UP FORM</h3>
-                <label for="codename">Codename:</label>
-                <input type="text" id="codename" required>
+                <h3>Share Your Spark</h3>
+                <div class="input-group">
+                    <input type="text" id="codename" placeholder=" " required>
+                    <label for="codename" class="floating-label">Codename</label>
+                </div>
                 <button type="button" onclick="nextStep()">Next</button>
             </div>
 
             <div class="card step step-6">
-                <h3>FILL-UP FORM</h3>
-                <label for="option">Sender Type:</label>
-                <select id="option" required>
-                    <option value="">Select a Type</option>
-                    <option value="MONTESSORIAN">Montessorian</option>
-                    <option value="NON-MONTESSORIAN">Non-Montessorian</option>
-                    <option value="ALUMNI-STUDENT">Alumni Student</option>
-                </select>
+                <h3>Share Your Spark</h3>
+                <div class="input-group">
+                    <select id="option" required>
+                        <option value="" disabled selected>Select a Type</option>
+                        <option value="MONTESSORIAN">Montessorian</option>
+                        <option value="NON-MONTESSORIAN">Non-Montessorian</option>
+                        <option value="ALUMNI-STUDENT">Alumni Student</option>
+                    </select>
+                </div>
                 <button type="button" onclick="nextStep()">Next</button>
             </div>
 
             <div class="card step step-7">
-                <h3>SUBMISSION</h3>
-                <p style="text-align: center;">Once submitted, changes may not be possible.</p><br>
+                <h3>Submission</h3>
+                <p style="text-align: center; color: var(--text-light);">You're almost there! Once submitted, changes cannot be made.</p><br>
                 <button type="submit">Submit</button>
             </div>
         </form>
     </div>
 
+    <div class="watermark">Created by: Kiff Hyacinth Pon</div>
+    <audio id="bgMusic" loop>
+        <source src="blue.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
-        Swal.fire({
-            title: 'WELCOME TO THE SPARK ARCHIVES',
-            html: `<p style="font-size: 0.95rem; color: var(--text-dark);">Share your thoughts anonymously and freely!</p>`,
-            imageUrl: 'https://i.ibb.co/YFgznXZM/received-964135092547666.jpg',
-            imageAlt: 'Logo',
-            imageWidth: 80,
-            imageHeight: 80,
-            background: 'linear-gradient(135deg, #F9F9F9, #F0F0F0)',
-            backdrop: 'rgba(0, 0, 0, 0.1)',
-            color: 'var(--text-dark)',
-            confirmButtonColor: 'var(--secondary-accent)',
-            confirmButtonText: "Let's Go!",
-            customClass: {
-                image: 'swal2-image',
-                popup: 'swal2-popup',
-                title: 'swal2-title',
-                confirmButton: 'swal2-confirm'
+        const canvas = document.getElementById('spark-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        const particles = [];
+        const particleCount = 100;
+        let mouse = { x: null, y: null, radius: 150 };
+
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
             }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+
+            update() {
+                if (this.x > width + this.size || this.x < -this.size) this.directionX *= -1;
+                if (this.y > height + this.size || this.y < -this.size) this.directionY *= -1;
+
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx*dx + dy*dy);
+
+                if (distance < mouse.radius) {
+                    let forceDirectionX = dx / distance;
+                    let forceDirectionY = dy / distance;
+                    let pushFactor = (mouse.radius - distance) / mouse.radius;
+                    this.x -= forceDirectionX * pushFactor * 1.5;
+                    this.y -= forceDirectionY * pushFactor * 1.5;
+                }
+
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        function init() {
+            particles.length = 0;
+            for (let i = 0; i < particleCount; i++) {
+                let size = Math.random() * 2 + 1;
+                let x = Math.random() * width;
+                let y = Math.random() * height;
+                let directionX = (Math.random() - 0.5) * 0.5;
+                let directionY = (Math.random() - 0.5) * 0.5;
+                let color = `rgba(0, 119, 182, ${Math.random() * 0.8 + 0.2})`;
+                particles.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, width, height);
+
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a; b < particles.length; b++) {
+                    let dx = particles[a].x - particles[b].x;
+                    let dy = particles[a].y - particles[b].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(108, 117, 125, ${1 - distance/100})`;
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            particles.forEach(p => p.update());
+        }
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            init();
+        });
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
         });
 
         let currentStep = 1;
+        const form = document.getElementById('submissionForm');
+        const progressSteps = document.querySelectorAll('.progress-step');
+        const header = document.querySelector('header');
+        const bgMusic = document.getElementById('bgMusic');
+        let musicStarted = false;
+
+        function playMusic() {
+            if (!musicStarted) {
+                bgMusic.play().then(() => {
+                    musicStarted = true;
+                    document.removeEventListener('click', playMusic);
+                }).catch(error => {
+                    console.error("Autoplay was prevented:", error);
+                });
+            }
+        }
+
+        function updateProgress() {
+            progressSteps.forEach(step => {
+                const stepNumber = parseInt(step.dataset.step);
+                if (stepNumber <= currentStep) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+        }
 
         function nextStep() {
             const currentCard = document.querySelector(`.card.step-${currentStep}`);
-            const inputs = currentCard.querySelectorAll('input, textarea, select');
+            const inputs = currentCard.querySelectorAll('input:required, textarea:required, select:required');
             let allValid = true;
 
             inputs.forEach((input) => {
-                if (input.required && !input.value.trim()) {
+                if (!input.value.trim() || (input.tagName === 'SELECT' && input.value === '')) {
                     allValid = false;
                     input.style.borderColor = 'red';
                 } else {
@@ -521,6 +644,7 @@
                 const nextCard = document.querySelector(`.card.step-${currentStep}`);
                 if (nextCard) {
                     nextCard.classList.add('active');
+                    updateProgress();
                 } else {
                     console.log("End of form steps. Ready for submission.");
                 }
@@ -530,18 +654,13 @@
                     text: 'Make sure to complete all required fields before proceeding.',
                     icon: 'warning',
                     confirmButtonText: 'OK',
-                    customClass: {
-                        popup: 'swal2-popup',
-                        title: 'swal2-title',
-                        confirmButton: 'swal2-confirm'
-                    }
+                    customClass: { popup: 'swal2-popup', title: 'swal2-title', confirmButton: 'swal2-confirm' }
                 });
             }
         }
 
-        document.getElementById("submissionForm").addEventListener("submit", async function(e) {
+        form.addEventListener("submit", async function(e) {
             e.preventDefault();
-
             const data = {
                 codename: document.getElementById('codename').value,
                 message_title: document.getElementById('message_title').value,
@@ -551,41 +670,44 @@
                 option: document.getElementById('option').value,
             };
 
-            const response = await fetch('/submit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            const result = await response.text();
-            if (response.ok) {
-                Swal.fire({
-                    title: 'Success!',
-                    text: 'Your message has been successfully sent for review.',
-                    icon: 'success',
-                    confirmButtonText: 'OK',
-                    customClass: {
-                        popup: 'swal2-popup',
-                        title: 'swal2-title',
-                        confirmButton: 'swal2-confirm'
-                    }
-                }).then(() => {
-                    document.getElementById('submissionForm').reset();
-                    document.querySelector(`.card.step-${currentStep}`).classList.remove('active');
-                    currentStep = 1;
-                    document.querySelector(`.card.step-1`).classList.add('active');
+            try {
+                const response = await fetch('/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
                 });
-            } else {
+
+                const result = await response.text();
+                if (response.ok) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Your message has been successfully sent for review.',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        customClass: { popup: 'swal2-popup', title: 'swal2-title', confirmButton: 'swal2-confirm' }
+                    }).then(() => {
+                        form.reset();
+                        document.querySelector(`.card.step-${currentStep}`).classList.remove('active');
+                        currentStep = 1;
+                        document.querySelector(`.card.step-1`).classList.add('active');
+                        updateProgress();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: result || 'Something went wrong. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        customClass: { popup: 'swal2-popup', title: 'swal2-title', confirmButton: 'swal2-confirm' }
+                    });
+                }
+            } catch (error) {
                 Swal.fire({
-                    title: 'Error!',
-                    text: result || 'Something went wrong. Please try again.',
+                    title: 'Network Error!',
+                    text: 'Could not connect to the server. Please check your internet connection.',
                     icon: 'error',
                     confirmButtonText: 'OK',
-                    customClass: {
-                        popup: 'swal2-popup',
-                        title: 'swal2-title',
-                        confirmButton: 'swal2-confirm'
-                    }
+                    customClass: { popup: 'swal2-popup', title: 'swal2-title', confirmButton: 'swal2-confirm' }
                 });
             }
         });
@@ -593,39 +715,35 @@
         function typeWriter(elementId, text, speed) {
             let i = 0;
             let targetElement = document.getElementById(elementId);
-            const cursorSpan = document.createElement('span');
-            cursorSpan.className = 'cursor';
-            
             targetElement.innerHTML = '';
-            targetElement.appendChild(cursorSpan);
-
             function type() {
                 if (i < text.length) {
-                    targetElement.innerHTML = text.substring(0, i + 1) + cursorSpan.outerHTML;
+                    targetElement.innerHTML += text.charAt(i);
                     i++;
                     setTimeout(type, speed);
-                } else {
-                    targetElement.innerHTML = text;
                 }
             }
             type();
         }
 
-        window.addEventListener('DOMContentLoaded', function () {
-            const audio = document.getElementById('bgMusic');
-            audio.play().catch(() => {
-                document.addEventListener('click', () => {
-                    audio.play();
-                }, { once: true });
-            });
-
-            const paragraphText = '“ Spark Archives is your safe space to express freely and anonymously. Whether it\'s a confession, a suggestion, or just a thought — your voice matters here. ”';
-            typeWriter('typewriter-paragraph', paragraphText, 50);
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
         });
+
+        window.addEventListener('DOMContentLoaded', function () {
+            const paragraphText = 'Spark Archives is your safe space to express freely and anonymously. Whether it\'s a confession, a suggestion, or just a thought — your voice matters here.';
+            typeWriter('typewriter-paragraph', paragraphText, 50);
+            updateProgress();
+            resizeCanvas();
+            init();
+            animate();
+        });
+
+        document.addEventListener('click', playMusic);
     </script>
-    <div class="watermark">Created by: Kiff Hyacinth Pon</div>
-    <audio id="bgMusic" loop>
-        <source src="blue.mp3" type="audio/mpeg">
-    </audio>
 </body>
 </html>
